@@ -1,4 +1,3 @@
-// app/components/navbar.tsx
 "use client";
 
 import Link from 'next/link';
@@ -27,34 +26,16 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link 
-              href="/" 
-              className="text-gray-700 hover:text-red-600 font-medium transition-colors"
-            >
+            <Link href="/" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
               Inicio
             </Link>
-            <Link 
-              href="/events" 
-              className="text-gray-700 hover:text-red-600 font-medium transition-colors"
-            >
+            <Link href="/events" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
               Eventos
             </Link>
-            <Link 
-              href="/about" 
-              className="text-gray-700 hover:text-red-600 font-medium transition-colors"
-            >
-              Nosotros
+            <Link href="/parts" className="text-gray-700 hover:text-red-600 font-medium transition-colors">
+              Partes
             </Link>
-            <Link 
-              href="/contact" 
-              className="text-gray-700 hover:text-red-600 font-medium transition-colors"
-            >
-              Contacto
-            </Link>
-            <Link 
-              href="/events/create" 
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-            >
+            <Link href="/events/create" className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
               Crear Evento
             </Link>
           </div>
@@ -80,39 +61,16 @@ export default function Navbar() {
         {isMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
-              <Link 
-                href="/" 
-                className="block px-3 py-2 text-gray-700 hover:text-red-600 font-medium transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
+              <Link href="/" className="block px-3 py-2 text-gray-700 hover:text-red-600 font-medium transition-colors" onClick={() => setIsMenuOpen(false)}>
                 Inicio
               </Link>
-              <Link 
-                href="/events" 
-                className="block px-3 py-2 text-gray-700 hover:text-red-600 font-medium transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
+              <Link href="/events" className="block px-3 py-2 text-gray-700 hover:text-red-600 font-medium transition-colors" onClick={() => setIsMenuOpen(false)}>
                 Eventos
               </Link>
-              <Link 
-                href="/about" 
-                className="block px-3 py-2 text-gray-700 hover:text-red-600 font-medium transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Nosotros
+              <Link href="/parts" className="block px-3 py-2 text-gray-700 hover:text-red-600 font-medium transition-colors" onClick={() => setIsMenuOpen(false)}>
+                Partes
               </Link>
-              <Link 
-                href="/contact" 
-                className="block px-3 py-2 text-gray-700 hover:text-red-600 font-medium transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Contacto
-              </Link>
-              <Link 
-                href="/events" 
-                className="block mx-3 mt-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-center"
-                onClick={() => setIsMenuOpen(false)}
-              >
+              <Link href="/events/create" className="block mx-3 mt-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-center" onClick={() => setIsMenuOpen(false)}>
                 Crear Evento
               </Link>
             </div>

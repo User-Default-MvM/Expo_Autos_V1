@@ -9,6 +9,7 @@ export default function CreateEventPage() {
   const [location, setLocation] = useState('')
   const [carType, setCarType] = useState('')
   const [imageUrl, setImageUrl] = useState('')
+  const [category, setCategory] = useState('')
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [imageLoading, setImageLoading] = useState(false)
@@ -19,13 +20,11 @@ export default function CreateEventPage() {
     const file = e.target.files?.[0]
     if (!file) return
 
-    // Validar tipo de archivo
     if (!file.type.startsWith('image/')) {
       alert('Por favor selecciona un archivo de imagen válido')
       return
     }
 
-    // Validar tamaño (máximo 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert('La imagen debe ser menor a 5MB')
       return
@@ -34,7 +33,6 @@ export default function CreateEventPage() {
     setImageLoading(true)
     setImageFile(file)
 
-    // Crear URL temporal para previsualizar
     const reader = new FileReader()
     reader.onload = (e) => {
       const result = e.target?.result as string
@@ -55,39 +53,39 @@ export default function CreateEventPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    
+
     try {
       let finalImageUrl = imageUrl
 
-      // Si hay un archivo seleccionado, podrías subirlo a un servicio de almacenamiento
-      // Por ahora, usaremos la URL base64 generada
+      // Aquí podrías subir la imagen a un servicio externo si quieres
       if (imageFile && imageUrl) {
-        // Aquí puedes implementar la subida a un servicio como Cloudinary, AWS S3, etc.
         // finalImageUrl = await uploadImageToService(imageFile)
-        finalImageUrl = imageUrl // Por ahora usamos la URL base64
+        finalImageUrl = imageUrl
       }
 
       const response = await fetch('/api/events', {
         method: 'POST',
-        body: JSON.stringify({ 
-          title, 
-          date: new Date(date).toISOString(), 
-          location, 
-          carType, 
-          imageUrl: finalImageUrl || null 
+        body: JSON.stringify({
+          title,
+          date: new Date(date).toISOString(),
+          location,
+          carType,
+          imageUrl: finalImageUrl || null,
+          category,
         }),
         headers: { 'Content-Type': 'application/json' },
       })
 
       if (response.ok) {
         const event = await response.json()
-        // Redirigir al evento creado
         router.push(`/events/${event.id}`)
       } else {
         const errorData = await response.json()
+        alert('Error al crear el evento: ' + (errorData.error || 'Error desconocido'))
         console.error('Error al crear el evento:', errorData)
       }
     } catch (error) {
+      alert('Error en la solicitud. Revisa la consola.')
       console.error('Error:', error)
     } finally {
       setLoading(false)
@@ -97,7 +95,7 @@ export default function CreateEventPage() {
   return (
     <form onSubmit={handleSubmit} className="p-6 max-w-md mx-auto">
       <h1 className="text-2xl mb-4 font-bold text-black">Crear Evento</h1>
-      
+
       <input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
@@ -105,7 +103,7 @@ export default function CreateEventPage() {
         className="block mb-4 border p-2 w-full rounded text-black placeholder-gray-500"
         required
       />
-      
+
       <input
         type="datetime-local"
         value={date}
@@ -113,7 +111,7 @@ export default function CreateEventPage() {
         className="block mb-4 border p-2 w-full rounded text-black"
         required
       />
-      
+
       <input
         value={location}
         onChange={(e) => setLocation(e.target.value)}
@@ -121,7 +119,7 @@ export default function CreateEventPage() {
         className="block mb-4 border p-2 w-full rounded text-black placeholder-gray-500"
         required
       />
-      
+
       <input
         value={carType}
         onChange={(e) => setCarType(e.target.value)}
@@ -129,14 +127,21 @@ export default function CreateEventPage() {
         className="block mb-4 border p-2 w-full rounded text-black placeholder-gray-500"
         required
       />
-      
+
+      <input
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        placeholder="Categoría"
+        className="block mb-4 border p-2 w-full rounded text-black placeholder-gray-500"
+        required
+      />
+
       {/* Selector de imagen */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-black mb-2">
           Imagen del evento
         </label>
-        
-        {/* Previsualización de imagen */}
+
         {imageUrl && (
           <div className="relative mb-4">
             <img
@@ -160,8 +165,7 @@ export default function CreateEventPage() {
             </button>
           </div>
         )}
-        
-        {/* Botón/área de selección */}
+
         <div className="flex items-center justify-center w-full">
           <label
             htmlFor="image-upload"
@@ -198,8 +202,7 @@ export default function CreateEventPage() {
             />
           </label>
         </div>
-        
-        {/* Información del archivo */}
+
         {imageFile && (
           <div className="mt-2 text-sm text-black">
             <p>Archivo: {imageFile.name}</p>
@@ -207,9 +210,9 @@ export default function CreateEventPage() {
           </div>
         )}
       </div>
-      
-      <button 
-        type="submit" 
+
+      <button
+        type="submit"
         disabled={loading || imageLoading}
         className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50 w-full hover:bg-blue-700 transition-colors"
       >

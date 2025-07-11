@@ -1,16 +1,15 @@
-// src/app/api/events/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/app/lib/prisma'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { title, date, location, carType, imageUrl } = body
+    const { title, date, location, carType, imageUrl, category } = body
 
     // Validar campos requeridos
-    if (!title || !date || !location || !carType) {
+    if (!title || !date || !location || !carType || !category) {
       return NextResponse.json(
-        { error: 'Faltan campos requeridos: title, date, location, carType' },
+        { error: 'Faltan campos requeridos: title, date, location, carType, category' },
         { status: 400 }
       )
     }
@@ -18,10 +17,11 @@ export async function POST(request: NextRequest) {
     const event = await prisma.event.create({
       data: {
         title,
-        date: date, // Enviar como string
+        date: new Date(date),
         location,
         carType,
-        imageUrl: imageUrl || null,
+        imageUrl: imageUrl || '',
+        category,
       },
     })
 
@@ -35,7 +35,6 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET para obtener todos los eventos
 export async function GET() {
   try {
     const events = await prisma.event.findMany({

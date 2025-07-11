@@ -1,0 +1,7 @@
+POST https://carapi.app/api/makes
+Content-Type: application/json
+
+{
+    "api_token": "3c7fe301-70e9-4efa-ba3c-24a739ebbeb3",
+    "api_secret": "2d2af3bbe4b6a40bfbaf371ecd71fcf2"
+}
